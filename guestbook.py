@@ -45,6 +45,10 @@ class Greeting(ndb.Model):
 
 # [START main_page]
 class MainPage(webapp2.RequestHandler):
+#Well, I hope I understand this correctly.  The class detail below addresses 
+#the behavior of the get post and validate functions in the guestbook form.
+#the method or class here of get is going to retrieve data from the server.  Data 
+#that has been previously posted.
 
     def get(self):
         guestbook_name = self.request.get('guestbook_name',
@@ -72,7 +76,12 @@ class MainPage(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
-# [END main_page]
+        #The GET method that is passing data retrieved from database
+        #(line 59) to the template (line78).  The template fills in 
+        #the variables with data retrived from the database and the
+        #result is rendered to the user. (this was taken almost verbatim
+        #from the reviewer's notes)
+        
 
 # [START guestbook]
 class Guestbook(webapp2.RequestHandler):
@@ -82,6 +91,11 @@ class Guestbook(webapp2.RequestHandler):
         # single entity group will be consistent. However, the write
         # rate to a single entity group should be limited to
         # ~1/second.
+        # in this method, under the Guestbook class we are posting data
+        # to the server by way of the guestbook form.
+        # we are also validating/retrieving data from the database
+        
+
         guestbook_name = self.request.get('guestbook_name',
                                           DEFAULT_GUESTBOOK_NAME)
         greeting = Greeting(parent=guestbook_key(guestbook_name))
@@ -91,8 +105,19 @@ class Guestbook(webapp2.RequestHandler):
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
 
+        #greeting.content = self.request.get('content')
+        #str = 'greeting.content'
+        #if str.isspace() == True :
+        #    print "we can't add blanks to the database!"
+        #else:
+        #    print "good deal it's going in now"
+        #    greeting.put()
+        str = ' '
         greeting.content = self.request.get('content')
-        if greeting.content:
+        if (greeting.content == '' or greeting.content.isspace()):
+            print "we can't add blanks to the database!"
+        else:
+            print "good deal it's going in now"
             greeting.put()
 
         query_params = {'guestbook_name': guestbook_name}
@@ -100,6 +125,6 @@ class Guestbook(webapp2.RequestHandler):
 # [END guestbook]
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
-    ('/sign', Guestbook),
+    ('/', MainPage), # this calls the MainPage class
+    ('/sign', Guestbook), #this calls the Guestbook class
 ], debug=True)
