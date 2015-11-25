@@ -1,5 +1,6 @@
 import os
 import urllib
+import logging
 
 from google.appengine.api import users
 # [START import_ndb]
@@ -12,6 +13,9 @@ import webapp2
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'])
+
+good_deal = "good deal the data is going in!"
+no_blanks = "we can't add blanks to the database!"
 
 
 DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
@@ -112,12 +116,13 @@ class Guestbook(webapp2.RequestHandler):
         #else:
         #    print "good deal it's going in now"
         #    greeting.put()
-        str = ' '
+
+    
         greeting.content = self.request.get('content')
         if (greeting.content == '' or greeting.content.isspace()):
-            print "we can't add blanks to the database!"
+            {% no_blanks %}
         else:
-            print "good deal it's going in now"
+           {% good_deal %}
             greeting.put()
 
         query_params = {'guestbook_name': guestbook_name}
@@ -128,3 +133,5 @@ app = webapp2.WSGIApplication([
     ('/', MainPage), # this calls the MainPage class
     ('/sign', Guestbook), #this calls the Guestbook class
 ], debug=True)
+
+
