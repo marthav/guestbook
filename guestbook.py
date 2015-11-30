@@ -119,19 +119,26 @@ class Guestbook(webapp2.RequestHandler):
 
     
         greeting.content = self.request.get('content')
-        if (greeting.content == '' or greeting.content.isspace()):
-            {% no_blanks %}
-        else:
-           {% good_deal %}
-            greeting.put()
+        #if (greeting.content == '' or greeting.content.isspace()):
+         #  print'no_blanks'
+        #else:
+        #   print'good_deal'
+        #    greeting.put()
+        
+        if (greeting.content == '' or greeting.content.isspace()): 
+            alert = no_blanks 
+        else: alert = good_deal greeting.put()
 
-        query_params = {'guestbook_name': guestbook_name}
+
+        query_params = {'guestbook_name': guestbook_name, 'alert': alert}
         self.redirect('/?' + urllib.urlencode(query_params))
 # [END guestbook]
 
-app = webapp2.WSGIApplication([
+application = webapp2.WSGIApplication([
     ('/', MainPage), # this calls the MainPage class
-    ('/sign', Guestbook), #this calls the Guestbook class
+    ('/sign?guestbook_name', Guestbook), #this calls the Guestbook class
 ], debug=True)
+
+
 
 
