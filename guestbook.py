@@ -109,21 +109,9 @@ class Guestbook(webapp2.RequestHandler):
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
 
-        #greeting.content = self.request.get('content')
-        #str = 'greeting.content'
-        #if str.isspace() == True :
-        #    print "we can't add blanks to the database!"
-        #else:
-        #    print "good deal it's going in now"
-        #    greeting.put()
 
     
         greeting.content = self.request.get('content')
-        #if (greeting.content == '' or greeting.content.isspace()):
-         #  print'no_blanks'
-        #else:
-        #   print'good_deal'
-        #    greeting.put()
         
         if (greeting.content == '' or greeting.content.isspace()): 
             alert = no_blanks 
@@ -136,8 +124,8 @@ class Guestbook(webapp2.RequestHandler):
         self.redirect('/?' + urllib.urlencode(query_params))
 # [END guestbook]
 
-application = webapp2.WSGIApplication([
+app = webapp2.WSGIApplication([
     ('/', MainPage), # this calls the MainPage class
-    ('/sign?guestbook_name', Guestbook), #this calls the Guestbook class
+    ('/sign', Guestbook), #this calls the Guestbook class
 ], debug=True)
 
