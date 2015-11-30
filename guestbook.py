@@ -127,7 +127,9 @@ class Guestbook(webapp2.RequestHandler):
         
         if (greeting.content == '' or greeting.content.isspace()): 
             alert = no_blanks 
-        else: alert = good_deal greeting.put()
+        else: 
+            alert = good_deal
+            greeting.put()
 
 
         query_params = {'guestbook_name': guestbook_name, 'alert': alert}
@@ -138,7 +140,4 @@ application = webapp2.WSGIApplication([
     ('/', MainPage), # this calls the MainPage class
     ('/sign?guestbook_name', Guestbook), #this calls the Guestbook class
 ], debug=True)
-
-
-
 
