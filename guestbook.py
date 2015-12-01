@@ -55,6 +55,9 @@ class MainPage(webapp2.RequestHandler):
 #that has been previously posted.
 
     def get(self):
+
+        alert = self.request.get('alert')
+
         guestbook_name = self.request.get('guestbook_name',
                                           DEFAULT_GUESTBOOK_NAME)
         greetings_query = Greeting.query(
@@ -76,6 +79,7 @@ class MainPage(webapp2.RequestHandler):
             'guestbook_name': urllib.quote_plus(guestbook_name),
             'url': url,
             'url_linktext': url_linktext,
+            'alert': alert
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -99,9 +103,9 @@ class Guestbook(webapp2.RequestHandler):
         # to the server by way of the guestbook form.
         # we are also validating/retrieving data from the database
         
-
         guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
+                                          DEFAULT_GUESTBOOK_NAME)                                 
+
         greeting = Greeting(parent=guestbook_key(guestbook_name))
 
         if users.get_current_user():
@@ -109,9 +113,9 @@ class Guestbook(webapp2.RequestHandler):
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
 
-
     
         greeting.content = self.request.get('content')
+        alert = self.request.get('alert')
         
         if (greeting.content == '' or greeting.content.isspace()): 
             alert = no_blanks 
